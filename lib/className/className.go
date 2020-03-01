@@ -56,7 +56,6 @@ func NewClassName(input string) *ClassName {
 	return &className
 }
 
-
 func (c *ClassName) GetDirPath() string {
 	d := path.Join("blocks", c.block)
 	if c.element != "" {
@@ -93,4 +92,15 @@ func (c *ClassName) GetFilePath() string {
 
 func (c *ClassName) GetCssTemplate() string {
 	return fmt.Sprintf(".%v {\n    \n}\n", c.GetClassName())
+}
+
+func (c *ClassName) GetImportPath() string {
+	if c.block != "" && c.modificator == "" && c.element == "" && c.value == "" {
+		return fmt.Sprintf("../blocks/%v/%v.css", c.block, c.block)
+	}
+	return fmt.Sprintf(path.Join(path.Base(c.GetDirPath()), c.GetFileName()))
+}
+
+func (c *ClassName) GetImportStatement() string  {
+	return fmt.Sprintf("@import \"%v\";\n", c.GetImportPath())
 }

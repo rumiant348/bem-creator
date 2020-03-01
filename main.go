@@ -27,7 +27,7 @@ func createCss(c *className.ClassName) {
 	// check if file exists
 	f, _ := os.Stat(filePath)
 	if f != nil {
-		fmt.Printf("%v \nFile exists already", filePath)
+		fmt.Printf("%v \nFile exists already\n", filePath)
 		os.Exit(1)
 	}
 
@@ -36,7 +36,7 @@ func createCss(c *className.ClassName) {
 	os.Create(filePath)
 	ioutil.WriteFile(filePath, []byte(data), os.ModePerm)
 	fmt.Printf("File written for %v\n", filePath)
-	fmt.Printf("Import path:\n @import \"%v\";", c.GetClassName())
+	fmt.Printf(c.GetImportStatement())
 }
 
 func getCurrentFolder() string {

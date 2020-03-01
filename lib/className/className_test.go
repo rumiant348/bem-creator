@@ -297,3 +297,67 @@ func Test__GetCssTemplate(t *testing.T) {
 		})
 	}
 }
+
+func Test__GetImportPath(t *testing.T) {
+	var tests = []struct {
+		input  ClassName
+		output string
+	}{
+		{
+			input: ClassName{
+				block: "block",
+			},
+			// importing to css from pages folder/
+			output: "../blocks/block/block.css",
+		},
+		{
+			input: ClassName{
+				block:   "block",
+				element: "element",
+			},
+			// importing to block css/
+			output: "__element/block__element.css",
+		},
+		{
+			input: ClassName{
+				block:       "block",
+				element:     "element",
+				modificator: "modificator",
+			},
+			output: "_modificator/block__element_modificator.css",
+		},
+		{
+			input: ClassName{
+				block:       "block",
+				element:     "element",
+				modificator: "modificator",
+				value:       "value",
+			},
+			output: "_modificator/block__element_modificator_value.css",
+		},
+		{
+			input: ClassName{
+				block:       "block",
+				modificator: "modificator",
+			},
+			output: "_modificator/block_modificator.css",
+		},
+		{
+			input: ClassName{
+				block:       "block",
+				modificator: "modificator",
+				value:       "value",
+			},
+			output: "_modificator/block_modificator_value.css",
+		},
+	}
+	for _, tt := range tests {
+		testName := fmt.Sprintf("%v", tt.input)
+		t.Run(testName, func(t *testing.T) {
+			got := tt.input.GetImportPath()
+			if got != tt.output {
+				t.Errorf("got %v, expected %v", got, tt.output)
+			}
+		})
+	}
+}
