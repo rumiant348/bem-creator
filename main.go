@@ -8,10 +8,6 @@ import (
 	"path"
 )
 
-var workFolder string = getCurrentFolder()
-
-//var workFolder string = "/home/rum348/node/YandexPraktikum_task2/blocks"
-
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Script takes 1 argument - classname")
