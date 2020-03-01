@@ -1,16 +1,16 @@
-#Bem Creator
+# Bem Creator
 
-##Description:
+## Description:
 A simple script used to help with the [BEM](https://en.bem.info/methodology/filestructure/#block-implementation-consists-of-separate-files) file structure
 
-##Install:
+## Install:
 assuming working installation of [GO](https://golang.org/doc/install#install):
 ```
 git clone git@github.com:rumiant348/bem-creator.git``
 go build
 go install
 ```
-##Usage:
+## Usage:
 ``bem-creator block__modificator_element`` at the root of yor project would:
 * create a css file with all subfolders
 `projectDir/blocks/block/__modificator/_element/block__modificator_element.css`
@@ -24,7 +24,7 @@ go install
 
 Script handles special cases like block__element or block_modificator_value
 
-##Contacts:
+## Contacts:
 if anything, please contact me at
 * telegram: [@Rum348](https://t.me/rum348)
 * email: [rumiant348@yandex.ru](mailto://rumiant348@yandex.ru)
