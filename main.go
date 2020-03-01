@@ -2,56 +2,51 @@ package main
 
 import (
 	"fmt"
+	"github.com/rumiant348/bem-creator/lib/className"
 	"io/ioutil"
 	"os"
 	"path"
-	"strings"
 )
 
-//var testWorkfolder string = "./home/rum348/node/YandexPraktikum_task2/blocks"
-var workfolder string = "/home/rum348/node/YandexPraktikum_task2/blocks"
+var workFolder string = getCurrentFolder()
+
+//var workFolder string = "/home/rum348/node/YandexPraktikum_task2/blocks"
 
 func main() {
 	if len(os.Args) < 2 {
-		panic("Provide argument")
+		fmt.Println("Script takes 1 argument - classname")
+		os.Exit(1)
 	}
 	input := os.Args[1]
-	err := createCss(input)
+	c := className.NewClassName(input)
+	createCss(c)
+}
+
+func createCss(c *className.ClassName) {
+
+	currentFolder := getCurrentFolder()
+	folderPath := path.Join(currentFolder, c.GetDirPath())
+	filePath := path.Join(currentFolder, c.GetFilePath())
+
+	// check if file exists
+	f, _ := os.Stat(filePath)
+	if f != nil {
+		fmt.Printf("%v \nFile exists already", filePath)
+		os.Exit(1)
+	}
+
+	os.MkdirAll(folderPath, os.ModePerm)
+	data := c.GetCssTemplate()
+	os.Create(filePath)
+	ioutil.WriteFile(filePath, []byte(data), os.ModePerm)
+	fmt.Printf("File written for %v\n", filePath)
+	fmt.Printf("Import path:\n @import \"%v\";", c.GetClassName())
+}
+
+func getCurrentFolder() string {
+	dir, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("File written for %v\n", input)
-}
-
-func createCss(s string) error {
-	a := strings.Split(s, "__")
-	class, element := a[0], a[1]
-	folderPath := path.Join(workfolder, class, "__" + element)
-	err := os.MkdirAll(folderPath, os.ModePerm)
-	if err != nil {
-		return err
-	}
-	filePath := path.Join(folderPath, fmt.Sprintf("%v__%v.css", class, element))
-
-	// check that file exists
-	f, err := os.Stat(filePath)
-	if err != nil {
-		if !os.IsNotExist(err) {
-			return err
-		}
-	}
-
-	if f != nil {
-		return os.ErrExist
-	}
-	data := fmt.Sprintf(".%v__%v {\n    \n}\n", class, element)
-	_, err = os.Create(filePath)
-	if err != nil {
-		return err
-	}
-	err = ioutil.WriteFile(filePath, []byte(data), os.ModePerm)
-	if err != nil {
-		return err
-	}
-	return nil
+	return dir
 }
